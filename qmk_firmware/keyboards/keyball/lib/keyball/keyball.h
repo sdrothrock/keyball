@@ -50,7 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #ifndef KEYBALL_AUTO_MOUSE_THRESHOLD
-#    define KEYBALL_AUTO_MOUSE_THRESHOLD 4
+#    define KEYBALL_AUTO_MOUSE_THRESHOLD 2
 #endif
 
 /// Specify SROM ID to be uploaded PMW3360DW (optical sensor).  It will be
