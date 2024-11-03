@@ -26,7 +26,6 @@ enum layer_number {
     _UPPER,
     _UTILS,
     _SETUP,
-    _EXTRA,
 };
 
 // clang-format off
@@ -67,13 +66,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______  , _______  , _______  , _______  , _______  , _______  , RGB_TOG  ,            RGB_TOG  , _______  , _______  , _______  , _______  , _______  , _______  ,
     _______  , _______  , _______  , _______  , _______  , _______  , _______  ,            _______  , _______  ,                                  _______  , _______
   ),
-  [_EXTRA] = LAYOUT(
-    _______  , _______  , _______  , _______  , _______  , _______  ,                                  _______  , _______  , _______  , _______  , _______  , _______  ,
-    _______  , _______  , _______  , _______  , _______  , _______  ,                                  _______  , _______  , _______  , _______  , _______  , _______  ,
-    _______  , _______  , _______  , _______  , _______  , _______  ,                                  _______  , _______  , _______  , _______  , _______  , _______  ,
-    _______  , _______  , _______  , _______  , _______  , _______  , _______  ,            _______  , _______  , _______  , _______  , _______  , _______  , _______  ,
-    _______  , _______  , _______  , _______  , _______  , _______  , _______  ,            _______  , _______  ,                                  _______  , _______
-  ),
 };
 // clang-format on
 
@@ -109,17 +101,13 @@ const rgblight_segment_t PROGMEM utils_layer[] = RGBLIGHT_LAYER_SEGMENTS(
 const rgblight_segment_t PROGMEM setup_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {0, RGBLED_NUM, SETUP_RED}
 );
-const rgblight_segment_t PROGMEM extra_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, RGBLED_NUM, HSV_ORANGE}
-);
 
 const rgblight_segment_t* const PROGMEM custom_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
     lower_layer,
     mouse_layer,
     upper_layer,
     utils_layer,
-    setup_layer,
-    extra_layer
+    setup_layer
 );
 
 void keyboard_post_init_user(void) {
@@ -132,7 +120,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     rgblight_set_layer_state(2, layer_state_cmp(state, _UPPER));
     rgblight_set_layer_state(3, layer_state_cmp(state, _UTILS));
     rgblight_set_layer_state(4, layer_state_cmp(state, _SETUP));
-    rgblight_set_layer_state(5, layer_state_cmp(state, _EXTRA));
     return state;
 }
 #endif
