@@ -2,6 +2,10 @@
 
 - Per-layer lighting
 
+  - 30 second timeout for LED backlighting
+
+  - Detect trackball activity to reset timeout (requires editing QMK, see `scott/keymap.c`, `pointing_device_task_user()`
+
 - Standalone mouse layer for easier typing after trackball usage
 
 - Maintains VIA compatibility to allow use of remap-keys.app

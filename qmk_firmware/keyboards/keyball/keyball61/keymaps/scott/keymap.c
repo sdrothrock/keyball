@@ -54,9 +54,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_UTILS] = LAYOUT(
     _______  , KC_F1    , KC_F2    , KC_F3    , KC_F4    , KC_F5    ,                                  KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    _______  , KC_PGUP  , KC_UP    , KC_PGDN  , _______  , KC_HOME  ,                                  _______  , _______  , _______  , _______  , _______  , KC_F12   ,
+    KC_TAB   , KC_PGUP  , KC_UP    , KC_PGDN  , _______  , KC_HOME  ,                                  _______  , _______  , _______  , _______  , _______  , KC_F12   ,
     _______  , KC_LEFT  , KC_DOWN  , KC_RGHT  , _______  , KC_END   ,                                  _______  , _______  , _______  , _______  , _______  ,C(G(KC_SPC)),
-    _______  , _______  , _______  , _______  , _______  , _______  , _______  ,            _______  , _______  , _______  , _______  , _______  , _______  , G(KC_DOT),
+    KC_LSFT  , _______  , _______  , _______  , _______  , _______  , _______  ,            _______  , _______  , _______  , _______  , _______  , _______  , G(KC_DOT),
     _______  , _______  , _______  , _______  , _______  , _______  , _______  ,            _______  , _______  ,                                  _______  , _______  
   ),
   [_SETUP] = LAYOUT(
@@ -78,6 +78,10 @@ void oledkit_render_info_user(void) {
     keyball_oled_render_layerinfo();
 }
 #endif
+
+/*
+ * RGBLIGHT per-layer lighting settings
+ */
 
 #if defined(RGBLIGHT_ENABLE)
 #define LOWER_LIGHT_BLUE    175,   0,  80
@@ -123,3 +127,65 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 #endif
+
+/*
+ * RGBLIGHT backlight timer
+ * https://docs.qmk.fm/custom_quantum_functions#keyboard-housekeeping
+ */
+static uint32_t key_timer;           // timer for last keyboard activity, use 32bit value and function to make longer idle time possible
+static void refresh_rgb(void);       // refreshes the activity timer and RGB, invoke whenever any activity happens
+static void check_rgb_timeout(void); // checks if enough time has passed for RGB to timeout
+bool is_rgb_timeout = false;         // store if RGB has timed out or not in a boolean
+
+
+void refresh_rgb(void) {
+    key_timer = timer_read32(); // store time of last refresh
+    if (is_rgb_timeout)
+    {
+        is_rgb_timeout = false;
+        rgblight_wakeup();
+    }
+}
+
+void check_rgb_timeout(void) {
+    if (!is_rgb_timeout && timer_elapsed32(key_timer) > RGBLIGHT_TIMEOUT)
+    {
+        rgblight_suspend();
+        is_rgb_timeout = true;
+    }
+}
+
+
+// Call QMK's built in post processing functions
+void housekeeping_task_user(void) {
+    // Runs at the end of each scan loop
+    #ifdef RGBLIGHT_TIMEOUT
+    check_rgb_timeout();
+    #endif
+}
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // Runs after each keypress
+    #ifdef RGBLIGHT_TIMEOUT
+    if (record->event.pressed) refresh_rgb();
+    #endif
+}
+
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    // Runs after each pointing device task to refresh RBG timer when mouse is in use
+    // Note: QMK firmware does not make is_auto_mouse_active() globally available, so the following files must be edited in the linked QMK source
+    //   quantum/pointing_device/pointing_device_auto_mouse.c: Change is_auto_mouse_active() signature to bool
+    //   quantum/pointing_device/pointing_device_auto_mouse.h: Add header
+    #ifdef RGBLIGHT_TIMEOUT
+    if(is_auto_mouse_active()) refresh_rgb();
+    #endif
+    return mouse_report;
+}
+
+void suspend_power_down_user(void) {
+    rgblight_suspend();
+}
+
+void suspend_wakeup_init_user(void) {
+    rgblight_wakeup();
+}
