@@ -44,3 +44,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #undef RGBLIGHT_EFFECT_SNAKE
 #undef RGBLIGHT_EFFECT_STATIC_GRADIENT
 #undef RGBLIGHT_EFFECT_TWINKLE
+

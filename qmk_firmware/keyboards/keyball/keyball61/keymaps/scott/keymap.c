@@ -97,19 +97,19 @@ void oledkit_render_info_user(void) {
 #define SETUP_RED             0, 255, 100
 
 const rgblight_segment_t PROGMEM lower_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, RGBLED_NUM, LOWER_LIGHT_BLUE}
+    {0, RGBLIGHT_LED_COUNT, LOWER_LIGHT_BLUE}
 );
 const rgblight_segment_t PROGMEM shift_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, RGBLED_NUM, SHIFT_LIGHT_BLUE}
+    {0, RGBLIGHT_LED_COUNT, SHIFT_LIGHT_BLUE}
 );
 const rgblight_segment_t PROGMEM mouse_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, RGBLED_NUM, MOUSE_ORANGE}
+    {0, RGBLIGHT_LED_COUNT, MOUSE_ORANGE}
 );
 const rgblight_segment_t PROGMEM utils_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, RGBLED_NUM, UTILS_AQUA}
+    {0, RGBLIGHT_LED_COUNT, UTILS_AQUA}
 );
 const rgblight_segment_t PROGMEM setup_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, RGBLED_NUM, SETUP_RED}
+    {0, RGBLIGHT_LED_COUNT, SETUP_RED}
 );
 
 const rgblight_segment_t* const PROGMEM custom_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
